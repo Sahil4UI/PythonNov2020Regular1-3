@@ -1,6 +1,7 @@
 import random
 import pygame
 pygame.init()
+
 W=1000
 H=800
 gameBoard = pygame.display.set_mode((W,H))
@@ -27,18 +28,20 @@ def Score(counter):
     gameBoard.blit(text,(10,10))
 
 def GameOver():
-    font = pygame.font.SysFont(None,50)
-    text = font.render("GAME OVER",True,blue)
+    font = pygame.font.SysFont(None,100)
+    text_1 = font.render("GAME OVER",True,blue)
+    text_2 = font.render("PRess SPACE to restart",True,red)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-            
-        
-        #anti-aliasing
-        
-        gameBoard.blit(text,(W//2-150,H//2-150))
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    Game()
+        gameBoard.blit(text_1,(W//2-150,H//2-150))
+        gameBoard.blit(text_2,(100,350))
         pygame.display.flip()
 
 
@@ -53,35 +56,37 @@ def Game():
     snakeList = []
     counter=0
     while True:
-        gameBoard.fill(white)
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    moveX = -5
+                    moveX = -2
                     moveY=0
                 elif event.key==pygame.K_RIGHT:
-                    moveX = 5
+                    moveX = 2
                     moveY=0
 
                 elif event.key == pygame.K_UP:
-                    moveY = -5
+                    moveY = -2
                     moveX=0
                 elif event.key==pygame.K_DOWN:
-                    moveY = 5
+                    moveY = 2
                     moveX=0
-            
-                
-        #surface , color , [x,y,width,height]
+        gameBoard.fill(white)
+        
         snake = pygame.draw.rect(gameBoard,red,[x,y,30,30])
 
         frog = pygame.Rect(frogX,frogY,40,40)
 
         gameBoard.blit(frogImage,(frogX,frogY))
 
-        Score(counter)
+        x += moveX
+        y += moveY
+
+
         
         if snake.colliderect(frog):
             frogX = random.randint(0,W - 40)
@@ -90,17 +95,13 @@ def Game():
             snakeLength+=20
             counter+=1
 
-        if snakeLength < len(snakeList):
-            del snakeList[0]
-            
-
-        x += moveX
-        y += moveY
-
-
+        Score(counter)
         snakeList.append([x,y])
         Snake(snakeList)
 
+        if snakeLength < len(snakeList):
+            del snakeList[0]
+        
         for i in snakeList[:-1]:
             if snakeList[-1] == i:
                 GameOver()
@@ -108,15 +109,15 @@ def Game():
             
             
         
-        if x > W-40:
-            moveX = -5
-        elif x<0:
-            moveX= 5
+        if x > W:
+            x = -50
+        elif x< -50:
+            x= W
 
-        elif y > H-40:
-            moveY = -5
-        elif y < 0:
-            moveY =  5
+        elif y > H:
+            y = -50
+        elif y < -50:
+            y =  H
             
         #pygame.draw.circle(gameBoard,red,[200,200],50)
             
