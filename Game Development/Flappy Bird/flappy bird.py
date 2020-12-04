@@ -25,7 +25,9 @@ px = W
 updown = [0,H/2-35]
 py = random.choice(updown)
 
-moveBird = 2
+
+fly = False
+
 while True:
 
     for event in pygame.event.get():
@@ -35,17 +37,21 @@ while True:
 
         if event.type == pygame.KEYDOWN:
             if event.key ==  pygame.K_SPACE:
-                moveBird = -4
-        else:
-            moveBird = 0.5
+                birdY -= 10
 
+
+
+            
+    birdY +=0.5
     gameBoard.blit(bg1,(bg_x1,bg_y1))
     gameBoard.blit(bg2,(bg_x2,bg_y2))
     bg_x1-=2
     bg_x2-=2
 
+   
+
     gameBoard.blit(bird,(200,birdY))
-    birdY += moveBird
+    
     gameBoard.blit(pillar,(px,py))
     px-=1
 
