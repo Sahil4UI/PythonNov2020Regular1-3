@@ -147,7 +147,7 @@ def main():
         Lives(encounter)
 
        
-        if birdRect.colliderect(pillarRect) or birdY < 600:
+        if birdRect.colliderect(pillarRect) or birdY > 600:
 
             encounter -= 1
             birdY= -100
